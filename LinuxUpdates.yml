@@ -1,0 +1,26 @@
+---
+- name: Update Ubuntu Servers
+  hosts: test_server
+  become: yes
+  tasks:
+    - name: Update APT
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: Upgrade Packages
+      ansible.builtin.apt:
+        upgrade: dist
+
+    - name: Check if reboot is needed
+      ansible.builtin.stat:
+        path: /var/run/reboot-required
+        get_checksum: no
+      register: reboot_required_file
+
+    - name: Reboot if required
+      ansible.builtin.reboot:
+      when: reboot_required_file.stat.exists == true
+
+    - name: Remove unneccessary dependencies
+      ansible.builtin.apt:
+        autoremove: yes

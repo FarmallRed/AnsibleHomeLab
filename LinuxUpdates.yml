@@ -1,6 +1,6 @@
 ---
 - name: Update Ubuntu Servers
-  hosts: test_server
+  hosts: linux
   become: yes
   tasks:
     - name: Update APT

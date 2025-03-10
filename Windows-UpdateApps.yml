@@ -1,0 +1,14 @@
+---
+- name: Update 3rd party apps
+  hosts: windows
+  tasks:
+
+    - name: Notepad++
+      win_chocolatey:
+        name: notepadplusplus
+        state: latest
+
+    - name: Firefox
+      win_chocolatey:
+        name: firefox
+        state: latest

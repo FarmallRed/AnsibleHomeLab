@@ -1,0 +1,29 @@
+---
+- name: Install emu-guest-agent on Debian Machines
+  hosts: linux  # Update with your actual host group
+  become: yes  # Run as root
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install emu-guest-agent package
+      apt:
+        name: emu-guest-agent
+        state: present
+
+    - name: Enable and start emu-guest-agent service
+      systemd:
+        name: emu-guest-agent
+        enabled: yes
+        state: started
+
+    - name: Verify emu-guest-agent is running
+      command: systemctl status emu-guest-agent
+      register: agent_status
+      changed_when: false
+
+    - name: Display service status
+      debug:
+        msg: "{{ agent_status.stdout }}"

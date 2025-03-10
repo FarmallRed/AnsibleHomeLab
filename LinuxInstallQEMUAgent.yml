@@ -13,17 +13,3 @@
         name: qemu-guest-agent
         state: present
 
-    - name: Enable and start qemu-guest-agent service
-      systemd:
-        name: qemu-guest-agent
-        enabled: yes
-        state: started
-
-    - name: Verify qemu-guest-agent is running
-      command: systemctl status qemu-guest-agent
-      register: agent_status
-      changed_when: false
-
-    - name: Display service status
-      debug:
-        msg: "{{ agent_status.stdout }}"

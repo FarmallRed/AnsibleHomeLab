@@ -1,0 +1,15 @@
+---
+- name: Install Windows Applications
+  hosts: windows
+  become: yes
+  tasks:
+
+    - name: Notepad++ 
+      win_chocolatey:
+        name: notepadplusplus
+        state: present
+
+    - name: FireFox
+      win_chocolatey:
+        name: firefox
+        state: present

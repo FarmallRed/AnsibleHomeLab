@@ -1,5 +1,5 @@
 ---
-- name: Install emu-guest-agent on Debian Machines
+- name: Install qemu-guest-agent on Debian Machines
   hosts: linux  # Update with your actual host group
   become: yes  # Run as root
 

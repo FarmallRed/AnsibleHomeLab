@@ -1,7 +1,6 @@
 ---
 - name: Install Windows Applications
   hosts: windows
-  become: yes
   tasks:
 
     - name: Notepad++ 

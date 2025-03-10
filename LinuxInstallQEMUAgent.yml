@@ -8,19 +8,19 @@
       apt:
         update_cache: yes
 
-    - name: Install emu-guest-agent package
+    - name: Install qemu-guest-agent package
       apt:
-        name: emu-guest-agent
+        name: qemu-guest-agent
         state: present
 
-    - name: Enable and start emu-guest-agent service
+    - name: Enable and start qemu-guest-agent service
       systemd:
-        name: emu-guest-agent
+        name: qemu-guest-agent
         enabled: yes
         state: started
 
-    - name: Verify emu-guest-agent is running
-      command: systemctl status emu-guest-agent
+    - name: Verify qemu-guest-agent is running
+      command: systemctl status qemu-guest-agent
       register: agent_status
       changed_when: false
 

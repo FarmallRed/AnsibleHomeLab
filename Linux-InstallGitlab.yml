@@ -1,0 +1,41 @@
+---
+- name: Install and Configure GitLab
+  hosts: gitlab_servers
+  become: true
+  vars:
+    gitlab_external_url: "https://gitlab.thefarmergeek.com"
+
+  tasks:
+    - name: Install dependencies
+      apt:
+        name:
+          - curl
+          - openssh-server
+          - ca-certificates
+          - tzdata
+          - perl
+        state: present
+        update_cache: yes
+
+    - name: Add GitLab package repository
+      shell: |
+        curl -fsSL https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | bash
+      args:
+        creates: /etc/apt/sources.list.d/gitlab_gitlab-ce.list
+
+    - name: Install GitLab
+      apt:
+        name: gitlab-ce
+        state: present
+        update_cache: yes
+
+    - name: Configure GitLab
+      lineinfile:
+        path: /etc/gitlab/gitlab.rb
+        regexp: "^external_url"
+        line: "external_url '{{ gitlab_external_url }}'"
+      notify: Reconfigure GitLab
+
+  handlers:
+    - name: Reconfigure GitLab
+      command: gitlab-ctl reconfigure

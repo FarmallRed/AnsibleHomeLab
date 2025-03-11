@@ -1,6 +1,6 @@
 ---
 - name: Install and Configure GitLab
-  hosts: gitlab_servers
+  hosts: linux
   become: true
   vars:
     gitlab_external_url: "https://gitlab.thefarmergeek.com"

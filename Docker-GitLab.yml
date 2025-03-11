@@ -1,0 +1,46 @@
+---
+- name: Deploy GitLab Docker Container
+  hosts: docker_servers
+  become: true
+  vars:
+    gitlab_container_name: gitlab
+    gitlab_image: gitlab/gitlab-ce:latest
+    gitlab_hostname: gitlab.example.com
+    gitlab_config_dir: /srv/gitlab/config
+    gitlab_logs_dir: /srv/gitlab/logs
+    gitlab_data_dir: /srv/gitlab/data
+    gitlab_ports:
+      - "80:80"
+      - "443:443"
+      - "22:22"
+
+  tasks:
+    - name: Ensure GitLab configuration directories exist
+      file:
+        path: "{{ item }}"
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+      loop:
+        - "{{ gitlab_config_dir }}"
+        - "{{ gitlab_logs_dir }}"
+        - "{{ gitlab_data_dir }}"
+
+    - name: Pull GitLab Docker image
+      docker_image:
+        name: "{{ gitlab_image }}"
+        source: pull
+
+    - name: Deploy GitLab container
+      docker_container:
+        name: "{{ gitlab_container_name }}"
+        image: "{{ gitlab_image }}"
+        hostname: "{{ gitlab_hostname }}"
+        state: started
+        restart_policy: always
+        published_ports: "{{ gitlab_ports }}"
+        volumes:
+          - "{{ gitlab_config_dir }}:/etc/gitlab"
+          - "{{ gitlab_logs_dir }}:/var/log/gitlab"
+          - "{{ gitlab_data_dir }}:/var/opt/gitlab"

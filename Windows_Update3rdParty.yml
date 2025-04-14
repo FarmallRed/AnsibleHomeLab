@@ -1,0 +1,19 @@
+---
+- name: Update all Chocolatey packages on Windows
+  hosts: windows
+  gather_facts: no
+  tasks:
+
+    - name: Ensure Chocolatey is installed
+      win_chocolatey:
+        name: chocolatey
+        state: present
+
+    - name: Upgrade all Chocolatey packages
+      win_command: choco upgrade all -y
+      register: choco_upgrade
+      changed_when: "'0 upgraded' not in choco_upgrade.stdout"
+
+    - name: Show upgrade output
+      debug:
+        var: choco_upgrade.stdout

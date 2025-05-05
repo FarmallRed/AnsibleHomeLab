@@ -1,0 +1,16 @@
+---
+- name: Clean up Docker resources
+  hosts: docker_hosts
+  become: yes
+  tasks:
+    - name: Prune stopped containers
+      ansible.builtin.command: docker container prune -f
+
+    - name: Prune unused images
+      ansible.builtin.command: docker image prune -a -f
+
+    - name: Prune unused volumes
+      ansible.builtin.command: docker volume prune -f
+
+    - name: Prune build cache
+      ansible.builtin.command: docker builder prune -f
